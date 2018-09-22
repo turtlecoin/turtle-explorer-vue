@@ -2,7 +2,8 @@
     <section>
         <generate-config
             :config="minerConfig"
-            :is-active="isConfigGeneratorActive"
+            :is-active="isActive"
+            v-on:update:isActive="isActive = $event"
         />
         <b-table
             :data="pools"
@@ -139,7 +140,7 @@ export default {
     },
     data () {
         return {
-            isConfigGeneratorActive: false,
+            isActive: false,
             minerConfig: {
                 pool: {},
                 config: {},
@@ -153,7 +154,7 @@ export default {
     },
     methods: {
         loadConfig (pool, config) {
-            this.isConfigGeneratorActive = true
+            this.isActive = true
             this.minerConfig.pool = pool
             this.minerConfig.config = config
         }
