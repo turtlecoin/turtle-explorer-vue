@@ -118,49 +118,73 @@ export default {
                     id: 1,
                     label: 'Difficulty',
                     location: 'data.network.difficulty',
-                    name: 'difficulty'
+                    name: 'difficulty',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 2,
                     label: 'Hashrate',
                     location: 'data.pool.hashrate',
-                    name: 'hashrate'
+                    name: 'hashrate',
+                    format: (val) => {
+                        return this.humanReadableHashrate(val)
+                    }
                 },
                 {
                     id: 3,
                     label: 'Height',
                     location: 'data.network.height',
-                    name: 'height'
+                    name: 'height',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 4,
                     label: 'Miners',
                     location: 'data.pool.miners',
-                    name: 'miners'
+                    name: 'miners',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 5,
                     label: 'Total Blocks',
                     location: 'data.pool.totalBlocks',
-                    name: 'totalBlocks'
+                    name: 'totalBlocks',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 6,
                     label: 'Total Miners Paid',
                     location: 'data.pool.totalMinersPaid',
-                    name: 'totalMinersPaid'
+                    name: 'totalMinersPaid',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 7,
                     label: 'Total Payments',
                     location: 'data.pool.totalPayments',
-                    name: 'totalPayments'
+                    name: 'totalPayments',
+                    format: (val) => {
+                        return val.toLocaleString()
+                    }
                 },
                 {
                     id: 8,
                     label: 'Time',
                     location: 'data.network.timestamp',
-                    name: 'timestamp'
+                    name: 'timestamp',
+                    format: (val) => {
+                        return (new Date(val * 1000)).toUTCString()
+                    }
                 }
             ],
             options : {
@@ -243,6 +267,20 @@ export default {
                 },
                 tooltip: {
                     backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                    formatter: function() {
+                        const points = this.points.sort((a, b) => {
+                            return b.y - a.y;
+                        })
+
+                        let tooltip = '<b>' + this.points[0].series.options.label + '</b>';
+
+                        this.points.forEach(point => {
+                            tooltip += '<br/><span style="color:' + point.series.color +';">' + point.series.name + ': ' + point.series.options.displayFormat(point.y) + '</span>'
+                        })
+
+                        return tooltip
+                    },
+                    shared: true,
                     split: true,
                     style: {
                         color: '#F0F0F0'
@@ -310,7 +348,6 @@ export default {
         this.chartParams.query.time.$lte = endDate
         this.chartParams.query.pool_id.$in = this.selectedPools
         this.chartParams.attribute = this.getAttributeName(this.selectedAttribute)
-        this.addSeries(this.getAttributeLabel(this.selectedAttribute), 'primary')
     },
     computed: {
         ...mapGetters('pool-history', { getChartData: 'list' }),
@@ -391,7 +428,10 @@ export default {
                                 val[1]
                             ]
                         }),
-                        name: pool[0].name + ' - ' + label,
+                        displayFormat: this.attributes.filter(attribute => attribute.label === label)[0].format,
+                        id: pool[0].id,
+                        label: label,
+                        name: pool[0].name,
                         yAxis: axisId
                     })
                 })
@@ -468,15 +508,18 @@ export default {
             },
             deep: true
         },
-        // pools: {
-        //     handler: function(newVal) {
-        //         if(!this.live) return
+        pools: {
+            handler: function(newVal) {
+                // if(!this.live) return
 
-        //         const selectedPoolData = newVal.filter(pool => this.selectedPools.includes(pool.id))
-        //         const x = this.getAttributeLocation(this.selectedAttribute).split('.').reduce((acc, part) => acc && acc[part], selectedPoolData[0])
-        //     },
-        //     deep: true
-        // }
+                // const selectedPoolData = newVal.filter(pool => this.selectedPools.includes(pool.id))
+                // console.log(selectedPoolData)
+                // console.log(this.$refs.historical.chart.get(newVal.id))
+                // const x = this.getAttributeLocation(this.selectedAttribute).split('.').reduce((acc, part) => acc && acc[part], selectedPoolData)
+                // console.log(x)
+            },
+            deep: true
+        }
     }
 }
 </script>

@@ -68,10 +68,10 @@ Want to contribute? Great, feel free to reach out or submit a PR!
 TODO:
  - Add the ability for a user to generate miner config files for each pool using their wallet
  - Add the ability to compare pool and node data in a chart
- - Format chart data for better readability (format dates, toLocaleString, and human readable hashrates)
  - Add daemon
  - Add daemon db
  - Add daemon cache service to query the daemon and store the results in the db
+ - Add the ability to switch between historical and live line chart data
  - Format "my pool stats" downloadable spreadsheet
  - Add help section that explains all the pages and content
  - Work on the layout and design
