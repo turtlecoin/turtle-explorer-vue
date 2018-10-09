@@ -89,6 +89,11 @@ export default {
             type: Array,
             required: true,
             default: () => []
+        },
+        selectedPoolData: {
+            type: Array,
+            required: true,
+            default: () => []
         }
     },
     mixins: [vueMixin],
@@ -508,12 +513,22 @@ export default {
             },
             deep: true
         },
-        pools: {
+        selectedPoolData: {
             handler: function(newVal) {
                 // if(!this.live) return
 
-                // const selectedPoolData = newVal.filter(pool => this.selectedPools.includes(pool.id))
-                // console.log(selectedPoolData)
+                const selectedPoolData = newVal.filter(pool => this.selectedPools.includes(pool.id))
+
+                selectedPoolData.forEach(poolData => {
+                    if(!poolData.data) return
+
+                    const series = this.$refs.historical.chart.get(poolData.id)
+                    if (series === undefined) return
+                    // console.log(series.options)
+                    const yAxis = series.yAxis.options.id
+                    // console.log(poolData.data)
+                })
+
                 // console.log(this.$refs.historical.chart.get(newVal.id))
                 // const x = this.getAttributeLocation(this.selectedAttribute).split('.').reduce((acc, part) => acc && acc[part], selectedPoolData)
                 // console.log(x)

@@ -17,6 +17,18 @@ import List from '~/components/poolstats/List.vue'
 import { mapGetters } from 'vuex'
 
 export default {
+    head () {
+        return {
+            title: 'TurtleCoin Explorer - My Pool Stats',
+            meta: [
+                {
+                    hid: 'description',
+                    name: 'description',
+                    content: 'View data from all the TurtleCoin pools you\'ve mined at'
+                }
+            ]
+        }
+    },
     components: { List },
     data () {
         return {

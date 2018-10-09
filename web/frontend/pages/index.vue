@@ -68,3 +68,20 @@
         </div>
     </section>
 </template>
+
+<script>
+    export default {
+        head () {
+            return {
+                title: 'TurtleCoin Explorer',
+                meta: [
+                    {
+                        hid: 'description',
+                        name: 'description',
+                        content: 'Explore block, node, pool, and transaction data for TurtleCoin'
+                    }
+                ]
+            }
+        }
+    }
+</script>

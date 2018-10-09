@@ -12,3 +12,20 @@
         </div>
     </section>
 </template>
+
+<script>
+    export default {
+        head () {
+            return {
+                title: 'TurtleCoin Explorer - Resources',
+                meta: [
+                    {
+                        hid: 'description',
+                        name: 'description',
+                        content: 'TurtleCoin Resources'
+                    }
+                ]
+            }
+        }
+    }
+</script>

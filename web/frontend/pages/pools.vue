@@ -21,6 +21,7 @@
                 <pool-history
                     :pools="pools"
                     :selectedPools="selectedPools"
+                    :selectedPoolData="selectedPoolData"
                 />
             </div>
         </div>
@@ -43,6 +44,18 @@ import PoolHistory from '~/components/pools/graphs/PoolHistory.vue'
 import { mapGetters } from 'vuex'
 
 export default {
+    head () {
+        return {
+            title: 'TurtleCoin Explorer - Pool Explorer',
+            meta: [
+                {
+                    hid: 'description',
+                    name: 'description',
+                    content: 'View live and historical information for TurtleCoin pools and generate mining configs'
+                }
+            ]
+        }
+    },
     components: { Pie, PoolHistory, List },
     data () {
         return {
@@ -51,8 +64,13 @@ export default {
     },
     computed: {
         ...mapGetters('pool', { getPools: 'list' }),
-        pools () {
-            return this.getPools.filter(pool => pool.hasOwnProperty('data') && pool.data.pool)
+        hashrates () {
+            return this.pools.map(pool => {
+                return {
+                    name: pool.name,
+                    y: pool.data.pool.hashrate
+                }
+            })
         },
         miners () {
             return this.pools.map(pool => {
@@ -62,13 +80,11 @@ export default {
                 }
             })
         },
-        hashrates () {
-            return this.pools.map(pool => {
-                return {
-                    name: pool.name,
-                    y: pool.data.pool.hashrate
-                }
-            })
+        pools () {
+            return this.getPools.filter(pool => pool.hasOwnProperty('data') && pool.data.pool)
+        },
+        selectedPoolData () {
+            return this.getPools.filter(pool => this.selectedPools.includes(pool.id))
         }
     },
     methods: {
