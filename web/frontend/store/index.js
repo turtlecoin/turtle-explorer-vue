@@ -15,20 +15,13 @@ const store = () => new Vuex.Store({
       instanceDefaults: {
         id: null,
         api: '',
-        data: '',
+        data: {},
+        ports: [],
         name: '',
-        type: '',
+        software: '',
         url: '',
         mining_address: '',
         trusted: ''
-      }
-    }),
-    service('pool-data', {
-      idField: 'time',
-      instanceDefaults: {
-        pool_id: null,
-        time: '',
-        data: ''
       }
     }),
     service('pool-history', {
@@ -42,19 +35,11 @@ const store = () => new Vuex.Store({
       idField: 'id',
       instanceDefaults: {
         id: null,
-        data: '',
         name: '',
+        data: {},
         port: '',
         url: '',
         ssl: ''
-      }
-    }),
-    service('node-data', {
-      idField: 'time',
-      instanceDefaults: {
-        data: '',
-        time: '',
-        node_id: null
       }
     }),
     service('node-history', {

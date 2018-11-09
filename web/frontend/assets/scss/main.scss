@@ -98,11 +98,13 @@ pre {
 .table td, .table th {
     border: 1px solid #4e6e7d !important;
     border-width: 0 0 1px !important;
-    padding: 0.25em 0.75em;
+    padding: 0.25em;
     vertical-align: middle;
 }
 
-.vue-highcharts, .highcharts-container, .highcharts-root {
+.vue-highcharts,
+.highcharts-container,
+.highcharts-root {
     min-width: 100%;
 }
 
@@ -177,4 +179,40 @@ $sides: (top, bottom, left, right);
 
 pre {
     text-align: left;
+}
+
+.table.is-hoverable tbody tr:not(.is-selected):hover {
+    background-color: #4a4a4a !important;
+}
+
+.b-table .table:focus {
+    box-shadow: none !important;
+}
+
+.b-table .table {
+    border: 0px;
+    outline-style: none;
+}
+
+.pagination-previous,
+.pagination-next,
+.pagination-link {
+    border-color: #4e6e7d;
+    color: #fefefe;
+    background: #3c3c3c;
+}
+
+.pagination-previous:hover,
+.pagination-next:hover,
+.pagination-link:hover,
+.pagination .is-current {
+    background-color: #4a4a4a;
+    border-color: #4e6e7d;
+    color: #fefefe;
+}
+
+.pagination-previous:focus,
+.pagination-next:focus,
+.pagination-link:focus {
+    border-color: #4e6e7d;
 }

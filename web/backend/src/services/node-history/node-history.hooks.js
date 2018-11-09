@@ -15,34 +15,22 @@ module.exports = {
     find: [
       redisBefore(),
       context => {
+        let acceptableAttributes = [
+          'difficulty',
+          'hashrate',
+          'height',
+          'incoming_connections_count',
+          'outgoing_connections_count',
+          'last_known_block_index',
+          'tx_pool_size',
+          'start_time'
+        ]
+
         let attribute = ''
-        switch (context.params.query.attribute) {
-          case 'difficulty':
-            attribute = "(data->>'difficulty')::float"
-            break;
-          case 'hashrate':
-            attribute = "(data->>'hashrate')::float"
-            break;
-          case 'height':
-            attribute = "(data->>'height')::float"
-            break;
-          case 'incomingConnectionsCount':
-            attribute = "(data->>'incoming_connections_count')::float"
-            break;
-          case 'outgoingConnectionsCount':
-            attribute = "(data->>'outgoing_connections_count')::float"
-            break;
-          case 'lastKnownBlockIndex':
-            attribute = "(data->>'last_known_block_index')::float"
-            break;
-          case 'transactionPool':
-            attribute = "(data->>'tx_pool_size')::float"
-            break;
-          case 'startTime':
-            attribute = "(data->>'start_time')::float"
-            break;
-          default:
-            return Promise.resolve(context)
+        if(acceptableAttributes.includes(context.params.query.attribute)) {
+          attribute = context.params.query.attribute
+        } else {
+          return Promise.resolve(context)
         }
 
         let timeBucket = "1 hour"
@@ -54,13 +42,13 @@ module.exports = {
         context.params.sequelize = {
           attributes: [
             sequelize.literal("time_bucket('"+ timeBucket +"', time)::timestamp without time zone as \"timebucket\""),
-            sequelize.literal(attribute + " as \"data\""),
+            sequelize.literal('"' + attribute + '"' + ' as "data"'),
             'node_id'
           ],
           group: [
             [sequelize.literal('"timebucket"')],
-            ['node_id'],
-            ['data']
+            [attribute],
+            ['node_id']
           ],
           order: [
             [sequelize.literal('"timebucket" ASC')]

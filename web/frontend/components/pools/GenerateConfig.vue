@@ -12,7 +12,7 @@
                 subtitle=""
                 color="#00853D"
             >
-                <tab-content title="Software &amp; OS" icon="fas fa-wallet" :before-change="validateSoftwareAndOS">
+                <tab-content title="Software &amp; OS" icon="fas fa-save" :before-change="validateSoftwareAndOS">
                     <div class="field is-horizontal">
                         <div class="field-label is-normal">
                             <label class="label">Software</label>
@@ -87,6 +87,18 @@
                                     Address: 
                                 </span>
                                 {{ config.pool.mining_address }}
+                            </li>
+                            <li v-if="config.config.fee_id !== null">
+                                <span class="has-text-weight-semibold">
+                                    Fee Type: 
+                                </span>
+                                {{ getPortFeeType(config.config.fee_id) }}
+                            </li>
+                            <li v-if="config.config.fee_id !== null">
+                                <span class="has-text-weight-semibold">
+                                    Fee: 
+                                </span>
+                                {{ getPortFee(config.config.fee_id) }}%
                             </li>
                             <li>
                                 <span class="has-text-weight-semibold">
@@ -218,9 +230,7 @@ export default {
             this.$emit('update:isActive', false)
         },
         generateConfig () {
-            console.log(sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim())
             this.minerConfig.result.command = sprintf.sprintf(this.minerConfig.miner.os.command, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim()
-            console.log(sprintf.sprintf(this.minerConfig.miner.os.config, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim())
             this.minerConfig.result.config = sprintf.sprintf(this.minerConfig.miner.os.config, this.config.pool.mining_address, this.config.config.port, this.minerConfig.wallet).trim()
             return true
         },
@@ -239,10 +249,17 @@ export default {
         },
         copyConfig () {
             this.configCopied = this.minerConfig.result.config !== null ? true : false
-        }
-        ,
+        },
         copyCommand () {
             this.commandCopied = this.minerConfig.result.command !== null ? true : false
+        },
+        getPortFee (feeId) {
+            if(this.config.pool.fees === undefined) return
+            return this.config.pool.fees.filter(val => val.id === feeId)[0].fee
+        },
+        getPortFeeType (feeId) {
+            if(this.config.pool.fees === undefined) return
+            return this.config.pool.fees.filter(val => val.id === feeId)[0].fee_type
         }
     },
     watch: {
